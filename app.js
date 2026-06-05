@@ -1,618 +1,651 @@
-/* Catálogo Implementos — Flipbook */
+/* Catálogo Implementos — catálogo principal */
 (function () {
   const C = window.CATALOG;
-  const CLP = (n) => "$" + n.toLocaleString("es-CL");
+  if (!C) return;
 
+  const CLP = (n) => "$" + n.toLocaleString("es-CL");
   const LOGO = "https://admin.implementos.cl/assets/img/logo-implementos.png";
-  const logoChip = (h) => `<span class="logo-mark"><img class="logo-img" src="${LOGO}" alt="Implementos" style="height:${h}px"><span class="logo-text" style="display:none;font-size:${Math.round(h*0.62)}px"><b>implementos</b><span class="ep">EPYSA</span></span></span>`;
+  const KEY = "implementos_quote_v1";
 
   const ICON = {
-    cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2.2l2.1 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/></svg>',
-    check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>',
-    plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
-    star:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.8 6.1 20.5l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>',
-    minus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>',
-    up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>',
-    down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
-    stack:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4-8 4-8-4 8-4z"/><path d="M4 12l8 4 8-4M4 17l8 4 8-4"/></svg>',
-    left:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
-    right:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
-    pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>',
-    phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>',
-    chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.8-.8L3 20.5l1.4-4.2A8.4 8.4 0 0 1 3.5 11 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg>',
-    store:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9M4 9h16"/></svg>',
-    expand:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>',
-    close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2.2l2.1 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
+    minus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>',
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.8 6.1 20.5l1.3-6.6L2.5 9.4l6.6-.8z"/></svg>',
+    close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    expand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>',
+    stack: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4-8 4-8-4 8-4z"/><path d="M4 12l8 4 8-4M4 17l8 4 8-4"/></svg>',
+    trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/><path d="M10 11v6M14 11v6"/></svg>',
   };
 
-  /* ---------- estado cotización ---------- */
-  const KEY = "implementos_quote_v1";
+  const ART = {
+    aceite: "filterCart",
+    secadores: "canister",
+    aire: "airfilter",
+    hidraulicos: "cartridge",
+    frenos: "pad",
+    refrigeracion: "radiator",
+    lubricantes: "bottle",
+    electrico: "battery",
+    correas: "belt",
+  };
+
+  const app = document.getElementById("app");
+  const allItems = C.categories.flatMap((cat) =>
+    cat.products.map((product, index) => ({ cat, product, index }))
+  );
+  const productBySku = new Map(allItems.map((item) => [item.product.sku, item]));
+  const totalItems = allItems.length;
+  const offerCount = allItems.filter(({ product }) => isOffer(product)).length;
+  const bulkCount = allItems.filter(({ product }) => product.bulkPrice).length;
+
   let quote = {};
   try { quote = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
-  const saveQuote = () => localStorage.setItem(KEY, JSON.stringify(quote));
-  const quoteCount = () => Object.values(quote).reduce((a, b) => a + b, 0);
 
-  const totalItems = C.categories.reduce((a, c) => a + c.products.length, 0);
-  const PAGE_W = 820;
-  const PAGE_H = 1080;
-  const SPREAD_W = PAGE_W * 2;
+  const state = {
+    category: "all",
+    flag: "all",
+    query: "",
+    sort: "category",
+    cartOpen: false,
+  };
 
-  /* ============================================================
-     CONSTRUCCIÓN DE PÁGINAS
-     ============================================================ */
-  function bandTop() {
-    return `<div class="pg__band"><span class="tg">El supermercado del transporte</span><span class="band-mk">implementos<span class="cl">.cl</span></span></div>`;
-  }
-  function footBar(page) {
-    return `<div class="pg__foot"><span>IMPLEMENTOS.CL · 30 tiendas</span><span class="pageno">PÁG · ${page}</span></div>`;
-  }
-
-  function specsTable(specs) {
-    return '<table class="spec-table"><tbody>' +
-      specs.map(([k, v]) =>
-        `<tr><td class="k">${k}</td><td class="v">${v}</td></tr>`).join("") +
-      '</tbody></table>';
+  function esc(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   }
 
-  const ART = { aceite:"filterCart", secadores:"canister", aire:"airfilter", hidraulicos:"cartridge", frenos:"pad", refrigeracion:"radiator", lubricantes:"bottle", electrico:"battery", correas:"belt" };
-  function imgSrcs(p, art) {
-    const n = Math.max(1, Math.min(4, p.imgs || 3));
-    return Array.from({ length: n }, (_, i) => (window.partImage ? window.partImage(art, i) : ""));
-  }
-  function slotEl(id, src, ph, cls) {
-    return `<image-slot id="${id}"${cls ? ` class="${cls}"` : ""} fit="contain" src="${src}" placeholder="${ph || ""}"></image-slot>`;
+  function norm(value) {
+    return String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
-  function mayorTag(p) {
-    if (!p.bulkPrice) return "";
-    const off = Math.round((p.price - p.bulkPrice) / p.price * 100);
-    const mid = Math.round((p.price + p.bulkPrice) / 2 / 10) * 10;
-    const offMid = Math.round((p.price - mid) / p.price * 100);
-    const f = p.bulkFrom || 3;
-    const rows = `
-      <tr><td class="u">1 u</td><td class="pu">${CLP(p.price)} <span>c/u</span></td><td class="d">—</td></tr>
-      <tr><td class="u">2 u</td><td class="pu">${CLP(mid)} <span>c/u</span></td><td class="d">-${offMid}%</td></tr>
-      <tr class="hot"><td class="u">${f}+ u</td><td class="pu">${CLP(p.bulkPrice)} <span>c/u</span></td><td class="d">-${off}%</td></tr>`;
-    return `<span class="flag flag--mayor" tabindex="0">${ICON.stack} Por mayor -${off}%
-      <div class="mayor-pop">
-        <div class="mayor-pop__head"><span class="mp-tag">${ICON.stack} Por mayor</span><b>Paga menos</b></div>
-        <table class="mayor-pop__tbl"><tbody>${rows}</tbody></table>
-        <div class="mayor-pop__foot">Aplica para productos seleccionados, mientras dure el stock.</div>
-      </div></span>`;
+  function saveQuote() {
+    localStorage.setItem(KEY, JSON.stringify(quote));
   }
 
-  function mediaHTML(p, slotId, variant, art) {
-    const flags = `<div class="pcard__flags" data-flags>${(p.flags || []).map((f) => `<span class="flag flag--${f.toLowerCase().replace(/[^a-z0-9]+/g, "")}">${f}</span>`).join("")}${mayorTag(p)}</div>`;
-    const srcs = imgSrcs(p, art);
-    const n = srcs.length;
-    const zoom = `<button class="gal__zoom" data-zoom title="Ver en grande">${ICON.expand}</button>`;
-
-    // HERO: fila de imágenes (1 = ancho completo, 2–3 lado a lado)
-    if (variant === "hero") {
-      const tiles = srcs.map((s, i) =>
-        `<div class="htile" data-stage>${slotEl(`${slotId}-${i}`, s, "Foto")}${i === 0 ? zoom : ""}</div>`).join("");
-      return `<div class="pcard__media gal-row gal-row--${n}">${flags}${tiles}</div>`;
-    }
-
-    // VERTICAL: carrusel (controles sólo si hay más de 1 imagen)
-    if (variant === "v") {
-      const slides = srcs.map((s, i) => slotEl(`${slotId}-${i}`, s, "Foto", "cslide" + (i === 0 ? " on" : ""))).join("");
-      const ctrls = n > 1
-        ? `<button class="carousel__nav prev" data-cnav="-1" aria-label="Anterior">${ICON.left}</button>
-           <button class="carousel__nav next" data-cnav="1" aria-label="Siguiente">${ICON.right}</button>
-           <div class="carousel__dots">${srcs.map((_, i) => `<button class="cdot${i === 0 ? " on" : ""}" data-cdot="${i}"></button>`).join("")}</div>`
-        : "";
-      return `<div class="pcard__media">${flags}<div class="carousel" data-carousel data-idx="0"><div class="carousel__track">${slides}</div>${ctrls}${zoom}</div></div>`;
-    }
-
-    // HORIZONTAL: 1 imagen = principal a todo el ancho (sin tira); 2+ = principal + miniaturas
-    if (n === 1) {
-      return `<div class="pcard__media gal-single">${flags}<div class="gal"><div class="gal__stage" data-stage>${slotEl(`${slotId}-0`, srcs[0], "Foto principal")}${zoom}</div></div></div>`;
-    }
-    const thumbs = srcs.slice(1).map((s, i) => slotEl(`${slotId}-${i + 1}`, s, "+")).join("");
-    const arrows = n - 1 > 2;
-    const rail = `<div class="gal__rail" data-rail data-roff="0">
-      ${arrows ? `<button class="rail-nav up" data-railnav="-1" aria-label="Subir">${ICON.up}</button>` : ""}
-      <div class="rail-view"><div class="rail-track">${thumbs}</div></div>
-      ${arrows ? `<button class="rail-nav down" data-railnav="1" aria-label="Bajar">${ICON.down}</button>` : ""}
-    </div>`;
-    return `<div class="pcard__media gal-thumbs">${flags}<div class="gal"><div class="gal__stage" data-stage>${slotEl(`${slotId}-0`, srcs[0], "Foto principal")}${zoom}</div>${rail}</div></div>`;
+  function quoteCount() {
+    return Object.values(quote).reduce((sum, qty) => sum + qty, 0);
   }
 
-  function ratingOf(p) {
-    if (p.rating) return { v: (+p.rating).toFixed(1), n: p.reviews || 0 };
-    let h = 0; for (const c of p.sku) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-    return { v: ((40 + (h % 10)) / 10).toFixed(1), n: 15 + (h % 240) };
+  function quoteTotal() {
+    return Object.entries(quote).reduce((sum, [sku, qty]) => {
+      const item = productBySku.get(sku);
+      return item ? sum + item.product.price * qty : sum;
+    }, 0);
   }
 
-  function infoHTML(p) {
-    const r = ratingOf(p);
-    return `
-      <div class="pcard__info">
-        <div class="pcard__head">
-          <span class="idg"><span class="pcard__brand">${p.brand}</span><span class="pcard__sku">${p.sku}</span></span>
-          <span class="pcard__rating">${ICON.star}<b>${r.v}</b><i>(${r.n})</i></span>
+  function isOffer(product) {
+    const flags = (product.flags || []).map((f) => norm(f));
+    return (product.listPrice && product.listPrice > product.price) ||
+      flags.includes("oferta") || flags.includes("cyber");
+  }
+
+  function ratingOf(product) {
+    if (product.rating) return { value: (+product.rating).toFixed(1), count: product.reviews || 0 };
+    let h = 0;
+    for (const c of product.sku) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+    return { value: ((40 + (h % 10)) / 10).toFixed(1), count: 15 + (h % 240) };
+  }
+
+  function logoChip(height) {
+    return `<span class="logo-mark">
+      <img class="logo-img" src="${LOGO}" alt="Implementos" style="height:${height}px">
+      <span class="logo-text" style="display:none;font-size:${Math.round(height * 0.58)}px"><b>implementos</b><span>EPYSA</span></span>
+    </span>`;
+  }
+
+  function slotEl(id, src, placeholder, extraClass) {
+    const cls = extraClass ? ` class="${extraClass}"` : "";
+    return `<image-slot id="${esc(id)}"${cls} fit="contain" src="${esc(src)}" placeholder="${esc(placeholder || "Foto")}"></image-slot>`;
+  }
+
+  function imageSources(product, cat) {
+    const count = Math.max(1, Math.min(4, product.imgs || 3));
+    const art = ART[cat.id] || "canister";
+    return Array.from({ length: count }, (_, i) => window.partImage ? window.partImage(art, i) : "");
+  }
+
+  function renderShell() {
+    app.innerHTML = `
+      <div class="catalog-app">
+        <header class="topbar">
+          <div class="topbar__brand">
+            ${logoChip(44)}
+            <div class="topbar__client">
+              <span>${esc(C.client.vehicle)}</span>
+              <b>${esc(C.client.name)}</b>
+            </div>
+          </div>
+          <button class="cart-button" id="quoteBtn" aria-label="Abrir carro de compras">
+            ${ICON.cart}
+            <span>Carro</span>
+            <b id="quoteCount">0</b>
+          </button>
+        </header>
+
+        <div class="catalog-layout">
+          <aside class="sidebar">
+            <section class="client-panel">
+              <span class="eyebrow">Catálogo personalizado</span>
+              <h1>${esc(C.client.vehicle)}</h1>
+              <div class="client-panel__meta">
+                <span>${esc(C.client.code)}</span>
+                <span>${totalItems} productos</span>
+              </div>
+            </section>
+
+            <nav class="category-nav" id="categoryNav" aria-label="Categorías"></nav>
+
+            <div class="sidebar__stats">
+              <span><b>${offerCount}</b> ofertas</span>
+              <span><b>${bulkCount}</b> por mayor</span>
+              <span><b>30</b> tiendas</span>
+            </div>
+          </aside>
+
+          <main class="catalog-main">
+            <section class="catalog-toolbar" aria-label="Filtros del catálogo">
+              <div class="search-box">
+                ${ICON.search}
+                <input id="searchInput" type="search" placeholder="Buscar por SKU, marca o producto" autocomplete="off">
+              </div>
+              <div class="filter-row" id="flagFilters" role="group" aria-label="Tipo de producto"></div>
+              <label class="sort-box">
+                <span>Orden</span>
+                <select id="sortSelect">
+                  <option value="category">Categoría</option>
+                  <option value="price-asc">Menor precio</option>
+                  <option value="price-desc">Mayor precio</option>
+                  <option value="brand">Marca</option>
+                </select>
+              </label>
+            </section>
+
+            <div class="result-bar">
+              <div>
+                <span class="eyebrow">Resultados</span>
+                <strong id="resultCount">${totalItems} productos</strong>
+              </div>
+              <button class="text-button" id="clearFilters" type="button">Limpiar filtros</button>
+            </div>
+
+            <div class="catalog-results" id="catalogResults"></div>
+          </main>
         </div>
-        <h3 class="pcard__title">${p.title}</h3>
-        <p class="pcard__sub">${p.subtitle || ""}</p>
-        ${specsTable(p.specs)}
+
+        <div class="toast" id="toast" role="status" aria-live="polite">
+          <span>${ICON.check}</span><b id="toastMsg">Agregado</b>
+        </div>
+
+        <div class="lightbox" id="lightbox" aria-hidden="true">
+          <button class="icon-button lightbox__close" data-lbclose aria-label="Cerrar">${ICON.close}</button>
+          <img id="lbImg" alt="Imagen de producto">
+        </div>
+
+        <div class="drawer-layer" id="drawerLayer" aria-hidden="true">
+          <button class="drawer-backdrop" id="drawerBackdrop" aria-label="Cerrar carro"></button>
+          <aside class="cart-drawer" id="cartDrawer" aria-label="Carro de compras"></aside>
+        </div>
       </div>`;
+
+    renderCategoryNav();
+    renderFlagFilters();
+    bindEvents();
+    hydrateLogoFallbacks();
+    refreshQuote();
+    renderResults();
+  }
+
+  function renderCategoryNav() {
+    const nav = document.getElementById("categoryNav");
+    nav.innerHTML = [
+      `<button class="category-link" type="button" data-category="all">
+        <span>Todos</span><b>${totalItems}</b>
+      </button>`,
+      ...C.categories.map((cat) => `<button class="category-link" type="button" data-category="${esc(cat.id)}">
+        <span>${esc(cat.short || cat.name)}</span><b>${cat.products.length}</b>
+      </button>`),
+    ].join("");
+  }
+
+  function renderFlagFilters() {
+    const filters = [
+      ["all", "Todos"],
+      ["offer", "Ofertas"],
+      ["original", "Original"],
+      ["bulk", "Por mayor"],
+    ];
+    document.getElementById("flagFilters").innerHTML = filters.map(([id, label]) =>
+      `<button class="chip" type="button" data-flag="${id}">${label}</button>`
+    ).join("");
+  }
+
+  function bindEvents() {
+    document.getElementById("searchInput").addEventListener("input", (event) => {
+      state.query = event.target.value;
+      renderResults();
+    });
+
+    document.getElementById("sortSelect").addEventListener("change", (event) => {
+      state.sort = event.target.value;
+      renderResults();
+      scrollCatalogTop();
+    });
+
+    document.getElementById("clearFilters").addEventListener("click", () => {
+      state.category = "all";
+      state.flag = "all";
+      state.query = "";
+      state.sort = "category";
+      document.getElementById("searchInput").value = "";
+      document.getElementById("sortSelect").value = "category";
+      renderResults();
+      scrollCatalogTop();
+    });
+
+    document.getElementById("quoteBtn").addEventListener("click", openCart);
+    document.getElementById("drawerBackdrop").addEventListener("click", closeCart);
+
+    app.addEventListener("click", (event) => {
+      const category = event.target.closest("[data-category]");
+      if (category) {
+        state.category = category.dataset.category;
+        renderResults();
+        scrollCatalogTop();
+        return;
+      }
+
+      const flag = event.target.closest("[data-flag]");
+      if (flag) {
+        state.flag = flag.dataset.flag;
+        renderResults();
+        scrollCatalogTop();
+        return;
+      }
+
+      const add = event.target.closest("[data-add],[data-inc]");
+      if (add) {
+        changeQty(add.dataset.add || add.dataset.inc, 1);
+        return;
+      }
+
+      const dec = event.target.closest("[data-dec]");
+      if (dec) {
+        changeQty(dec.dataset.dec, -1);
+        return;
+      }
+
+      const thumb = event.target.closest(".media-strip image-slot");
+      if (thumb) {
+        promoteImageSlot(thumb);
+        return;
+      }
+
+      const zoom = event.target.closest("[data-zoom]");
+      if (zoom) {
+        openLightbox(zoom.closest(".product-media").querySelector(".media-main image-slot"));
+        return;
+      }
+
+      if (event.target.closest("[data-lbclose]") || event.target === document.getElementById("lightbox")) {
+        closeLightbox();
+        return;
+      }
+
+      if (event.target.closest("[data-cart-close]")) {
+        closeCart();
+        return;
+      }
+
+      if (event.target.closest("[data-clear-cart]")) {
+        if (quoteCount() && confirm("¿Vaciar el carro de compras?")) {
+          quote = {};
+          saveQuote();
+          refreshQuote();
+          showToast("Carro vaciado");
+        }
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      if (document.getElementById("lightbox").classList.contains("show")) closeLightbox();
+      else if (state.cartOpen) closeCart();
+    });
+  }
+
+  function renderResults() {
+    const groups = buildResultGroups();
+    const count = groups.reduce((sum, group) => sum + group.items.length, 0);
+
+    document.getElementById("resultCount").textContent =
+      `${count} producto${count === 1 ? "" : "s"}`;
+
+    document.querySelectorAll("[data-category]").forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.category === state.category);
+    });
+    document.querySelectorAll("[data-flag]").forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.flag === state.flag);
+    });
+
+    const results = document.getElementById("catalogResults");
+    if (!count) {
+      results.innerHTML = `<section class="empty-state">
+        <span class="eyebrow">Sin resultados</span>
+        <h2>No encontramos productos con esos filtros</h2>
+      </section>`;
+      return;
+    }
+
+    results.innerHTML = groups.map(({ cat, items }) => renderCategorySection(cat, items)).join("");
+    refreshQuoteControls();
+  }
+
+  function scrollCatalogTop() {
+    const main = document.querySelector(".catalog-main");
+    if (!main) return;
+
+    const mainStyle = getComputedStyle(main);
+    const mainScrolls = mainStyle.overflowY !== "visible" && main.scrollHeight > main.clientHeight + 1;
+    const target = mainScrolls ? main : window;
+    target.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function buildResultGroups() {
+    let items = allItems.filter(({ cat, product }) => {
+      if (state.category !== "all" && cat.id !== state.category) return false;
+      if (state.flag === "offer" && !isOffer(product)) return false;
+      if (state.flag === "original" && !(product.flags || []).some((f) => norm(f) === "original")) return false;
+      if (state.flag === "bulk" && !product.bulkPrice) return false;
+
+      const q = norm(state.query);
+      if (!q) return true;
+      const text = norm([
+        cat.name,
+        cat.kicker,
+        product.brand,
+        product.sku,
+        product.title,
+        product.subtitle,
+        ...(product.flags || []),
+        ...product.specs.flat(),
+      ].join(" "));
+      return text.includes(q);
+    });
+
+    if (state.sort === "price-asc") items = items.slice().sort((a, b) => a.product.price - b.product.price);
+    if (state.sort === "price-desc") items = items.slice().sort((a, b) => b.product.price - a.product.price);
+    if (state.sort === "brand") items = items.slice().sort((a, b) => a.product.brand.localeCompare(b.product.brand, "es"));
+
+    if (state.category === "all" && state.sort !== "category") {
+      return [{
+        cat: sortedSectionMeta(),
+        items,
+      }];
+    }
+
+    const groups = [];
+    for (const cat of C.categories) {
+      const catItems = items.filter((item) => item.cat.id === cat.id);
+      if (catItems.length) groups.push({ cat, items: catItems });
+    }
+    return groups;
+  }
+
+  function sortedSectionMeta() {
+    const copy = {
+      "price-asc": "Productos de todas las categorías ordenados desde el menor precio.",
+      "price-desc": "Productos de todas las categorías ordenados desde el mayor precio.",
+      brand: "Productos de todas las categorías ordenados por marca.",
+    };
+
+    return {
+      id: "ordenado",
+      kicker: "Vista ordenada",
+      name: "Todos los productos",
+      blurb: copy[state.sort] || "Productos de todas las categorías.",
+      short: "Productos",
+    };
+  }
+
+  function renderCategorySection(cat, items) {
+    return `<section class="category-section" id="cat-${esc(cat.id)}">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">${esc(cat.kicker)}</span>
+          <h2>${esc(cat.name)}</h2>
+          <p>${esc(cat.blurb)}</p>
+        </div>
+        <strong>${String(items.length).padStart(2, "0")}</strong>
+      </div>
+      <div class="product-grid">
+        ${items.map((item) => renderProductCard(item)).join("")}
+      </div>
+    </section>`;
+  }
+
+  function renderProductCard({ cat, product, index }) {
+    const rating = ratingOf(product);
+    const specs = product.specs.slice(0, 5).map(([key, value]) =>
+      `<li><span>${esc(key)}</span><b>${esc(value)}</b></li>`
+    ).join("");
+
+    return `<article class="product-card" data-sku="${esc(product.sku)}">
+      ${renderProductMedia(cat, product, index)}
+      <div class="product-body">
+        <div class="product-kicker">
+          <span>${esc(product.brand)}</span>
+          <b>${esc(product.sku)}</b>
+        </div>
+        <h3>${esc(product.title)}</h3>
+        <p>${esc(product.subtitle || "")}</p>
+        <ul class="spec-list">${specs}</ul>
+      </div>
+      <div class="product-footer">
+        <div class="rating">${ICON.star}<b>${rating.value}</b><span>(${rating.count})</span></div>
+        ${renderPrice(product)}
+        <div class="addwrap" data-wrap="${esc(product.sku)}">${addControl(product.sku)}</div>
+      </div>
+    </article>`;
+  }
+
+  function renderProductMedia(cat, product, index) {
+    const sources = imageSources(product, cat);
+    const baseId = `slot-${cat.id}-${index}`;
+    const main = slotEl(`${baseId}-0`, sources[0], "Foto principal");
+    const thumbs = sources.slice(1).map((src, i) =>
+      slotEl(`${baseId}-${i + 1}`, src, "Foto", "media-thumb")
+    ).join("");
+    const flags = renderFlags(product);
+
+    return `<div class="product-media">
+      ${flags}
+      <div class="media-main">
+        ${main}
+        <button class="icon-button media-zoom" type="button" data-zoom aria-label="Ver imagen en grande">${ICON.expand}</button>
+      </div>
+      ${thumbs ? `<div class="media-strip">${thumbs}</div>` : ""}
+    </div>`;
+  }
+
+  function renderFlags(product) {
+    const flags = (product.flags || []).map((flag) =>
+      `<span class="flag flag--${norm(flag).replace(/[^a-z0-9]+/g, "")}">${esc(flag)}</span>`
+    );
+    if (product.bulkPrice) {
+      const off = Math.round((product.price - product.bulkPrice) / product.price * 100);
+      flags.push(`<span class="flag flag--bulk">${ICON.stack} Mayor -${off}%</span>`);
+    }
+    return flags.length ? `<div class="product-flags">${flags.join("")}</div>` : "";
+  }
+
+  function renderPrice(product) {
+    if (product.listPrice && product.listPrice > product.price) {
+      const off = Math.round((product.listPrice - product.price) / product.listPrice * 100);
+      return `<div class="price-block">
+        <strong class="price price--offer">${CLP(product.price)}</strong>
+        <span><s>${CLP(product.listPrice)}</s><b>-${off}%</b></span>
+      </div>`;
+    }
+    return `<div class="price-block"><strong class="price">${CLP(product.price)}</strong><span>C/IVA</span></div>`;
   }
 
   function addControl(sku) {
-    const q = quote[sku] || 0;
-    if (!q) return `<button class="add" data-add="${sku}"><span class="ic">${ICON.plus}</span><span class="lbl">Agregar</span></button>`;
-    return `<div class="stepper"><button class="step-btn" data-dec="${sku}" aria-label="Quitar uno">${ICON.minus}</button><span class="qty">${q}</span><button class="step-btn" data-inc="${sku}" aria-label="Agregar uno">${ICON.plus}</button></div>`;
-  }
-
-  function buyHTML(p) {
-    const isOffer = p.listPrice && p.listPrice > p.price;
-    const off = isOffer ? Math.round((p.listPrice - p.price) / p.listPrice * 100) : 0;
-    const priceMain = isOffer
-      ? `<div class="price offer"><span class="amt">${CLP(p.price)}</span><span class="iva">c/iva</span></div>
-         <div class="was"><span class="old">${CLP(p.listPrice)}</span><span class="off">-${off}% OFF</span></div>`
-      : `<div class="price"><span class="amt">${CLP(p.price)}</span><span class="iva">c/iva</span></div>`;
-    return `
-      <div class="pcard__buy">
-        <div class="prices">${priceMain}</div>
-        <div class="addwrap" data-wrap="${p.sku}">${addControl(p.sku)}</div>
-      </div>`;
-  }
-
-  function card(p, slotId, variant, extra, art) {
-    return `<article class="pcard pcard--${variant}${extra ? " " + extra : ""}">${mediaHTML(p, slotId, variant, art)}${infoHTML(p)}${buyHTML(p)}</article>`;
-  }
-
-  function categoryPage(cat) {
-    const ps = cat.products;
-    const n = ps.length;
-    const art = ART[cat.id] || "canister";
-    const sid = (i) => `slot-${cat.id}-${i}`;
-    let cards;
-    if (n === 1) {
-      cards = card(ps[0], sid(0), "hero", "", art);
-    } else if (n === 2) {
-      cards = card(ps[0], sid(0), "h", "", art) + card(ps[1], sid(1), "h", "", art);
-    } else if (n === 3) {
-      cards = card(ps[0], sid(0), "v", "", art) + card(ps[1], sid(1), "v", "", art) + card(ps[2], sid(2), "h", "span-2", art);
-    } else {
-      cards = ps.map((p, i) => card(p, sid(i), "v", "", art)).join("");
+    const qty = quote[sku] || 0;
+    if (!qty) {
+      return `<button class="add-button" type="button" data-add="${esc(sku)}">${ICON.plus}<span>Agregar</span></button>`;
     }
-    return `
-      <div class="pg">
-        ${bandTop()}
-        <div class="pg__inner">
-          <div class="cat-head">
-            <div class="idx">${cat.page}</div>
-            <div class="t">
-              <span class="kicker">${cat.kicker}</span>
-              <h2>${cat.name}</h2>
-              <p>${cat.blurb}</p>
-            </div>
-            <div class="meta"><span class="c">${String(n).padStart(2,"0")}</span><span class="l">ítems</span></div>
-          </div>
-          <div class="plist plist--${Math.min(n, 4)}">${cards}</div>
-        </div>
-        ${footBar(cat.page)}
-      </div>`;
+    return `<div class="qty-stepper">
+      <button type="button" data-dec="${esc(sku)}" aria-label="Quitar uno">${ICON.minus}</button>
+      <b>${qty}</b>
+      <button type="button" data-inc="${esc(sku)}" aria-label="Agregar uno">${ICON.plus}</button>
+    </div>`;
   }
 
-  function coverPage() {
-    return `
-      <div class="cover-pg">
-        <div class="base"></div>
-        <div class="ghost">EPYSA</div>
-        <div class="photo"><image-slot id="cover-truck" fit="cover" placeholder="Arrastra la foto del camión"></image-slot></div>
-        <div class="scrim"></div>
-        <div class="brand">
-          ${logoChip(72)}
-          <div class="tagline">El supermercado del transporte</div>
-          <div class="rule"></div>
-        </div>
-        <div class="body">
-          <div class="tag"><span class="d"></span> Catálogo personalizado · ${totalItems} repuestos</div>
-          <h1>Catálogo para<br><span class="l">${C.client.name}</span></h1>
-          <div class="sub"><span class="veh">${C.client.vehicle}</span><span class="sku">${C.client.code}</span></div>
-        </div>
-        <div class="bar">
-          <div class="stat"><b>30</b><span>Tiendas</span></div>
-          <div class="sep"></div>
-          <div class="stat"><b>Arica → P. Arenas</b><span>Cobertura nacional</span></div>
-          <div class="sep"></div>
-          <div class="stat"><b>${totalItems}</b><span>Productos</span></div>
-        </div>
-      </div>`;
-  }
-
-  function tocPage() {
-    const rows = C.categories.map((c) => `
-      <div class="row" data-goto-cat="${c.id}">
-        <span class="n">${c.page}</span>
-        <span class="t">${c.name}</span>
-        <span class="k">${c.kicker}</span>
-        <span class="ct">${String(c.products.length).padStart(2,"0")} ítems</span>
-      </div>`).join("");
-    return `
-      <div class="toc">
-        <div class="head">
-          <span class="kicker">Índice del catálogo</span>
-          <h2>Contenido</h2>
-          <div class="who"><span class="veh">${C.client.name} · ${C.client.vehicle}</span><span class="sku">${C.client.code}</span></div>
-        </div>
-        <div class="list">${rows}</div>
-        <div class="foot">Precios C/IVA referenciales · sujetos a stock · ${totalItems} productos seleccionados</div>
-      </div>`;
-  }
-
-  function backPage() {
-    return `
-      <div class="back-pg">
-        <div class="ghost">IMPLEMENTOS</div>
-        <div class="top">
-          ${logoChip(66)}
-          <div class="tagline">El supermercado del transporte</div>
-          <div class="rule"></div>
-        </div>
-        <div class="contact">
-          <div class="ci"><span class="ico">${ICON.store}</span><div><b>IMPLEMENTOS.CL</b><span>Tienda online</span></div></div>
-          <div class="ci"><span class="ico">${ICON.phone}</span><div><b>800 330 088</b><span>Venta telefónica</span></div></div>
-          <div class="ci"><span class="ico">${ICON.chat}</span><div><b>+56 9 3263 3571</b><span>WhatsApp</span></div></div>
-          <div class="ci"><span class="ico">${ICON.pin}</span><div><b>30 Tiendas</b><span>De Arica a Punta Arenas</span></div></div>
-        </div>
-        <div class="legal">@implementos.chile · @implementosrepuestos · Catálogo ${C.client.code} · 2026</div>
-      </div>`;
-  }
-
-  function endpaperHTML() {
-    return `<div class="endpaper"><div class="ghost">EPYSA</div>${logoChip(78)}<div class="ep-rule"></div><div class="ep-tag">El supermercado del transporte</div></div>`;
-  }
-
-  /* ---------- ensamblar páginas en orden ---------- */
-  const pages = [
-    { html: coverPage(), kind: "cover", label: "Portada" },
-    { html: tocPage(), kind: "toc", label: "Índice" },
-  ];
-  C.categories.forEach((c) => pages.push({ html: categoryPage(c), kind: "cat", id: c.id, label: c.short || c.name }));
-  // guarda (endpaper) para que la contraportada quede como página final centrada
-  if ((pages.length + 1) % 2 === 1) pages.push({ html: endpaperHTML(), kind: "endpaper", label: "" });
-  pages.push({ html: backPage(), kind: "back", label: "Contacto" });
-
-  // labels dinámicos por vista (spread)
-  const NLEAVES = pages.length / 2;
-  const labels = [];
-  for (let v = 0; v <= NLEAVES; v++) {
-    if (v === 0) labels.push(pages[0].label);
-    else if (v === NLEAVES) labels.push(pages[pages.length - 1].label || "Contraportada");
-    else {
-      const lf = pages[2 * v - 1], rt = pages[2 * v];
-      labels.push([lf && lf.label, rt && rt.label].filter(Boolean).join(" · "));
-    }
-  }
-
-  /* ============================================================
-     CONSTRUIR HOJAS (leaves)
-     ============================================================ */
-  const book = document.getElementById("book");
-  const N = pages.length / 2; // nº de hojas
-  const leaves = [];
-  for (let i = 0; i < N; i++) {
-    const front = pages[2 * i];
-    const back = pages[2 * i + 1];
-    const leaf = document.createElement("div");
-    leaf.className = "leaf";
-    leaf.dataset.i = i;
-    leaf.innerHTML = `
-      <div class="face front right">${front.html}
-        <button class="corner next" data-turn="next" aria-label="Siguiente"></button>
-      </div>
-      <div class="face back left">${back.html}
-        <button class="corner prev" data-turn="prev" aria-label="Anterior"></button>
-      </div>
-      <div class="sheen"></div>`;
-    book.appendChild(leaf);
-    leaves.push(leaf);
-  }
-
-  /* z-index + estado */
-  let current = 0;            // nº de hojas volteadas (0..N)
-  let busy = false;
-
-  function applyZ(turningIdx) {
-    leaves.forEach((leaf, i) => {
-      let z;
-      if (i < current) z = i + 1;        // volteadas (izquierda)
-      else z = N - i;                    // sin voltear (derecha)
-      if (i === turningIdx) z = N + 20;
-      leaf.style.zIndex = z;
-    });
-  }
-  function settleStaticPages() {
-    leaves.forEach((leaf, i) => {
-      leaf.classList.toggle("settled-left", i < current && !leaf.classList.contains("turning"));
-    });
-  }
-
-  function revealAll() { leaves.forEach((l) => { l.style.visibility = ""; }); }
-  /* ocultar hojas apiladas detrás cuando sólo se ve una página (portada/contraportada) */
-  function edgeHide() {
-    revealAll();
-    if (current === 0) { for (let i = 1; i < N; i++) leaves[i].style.visibility = "hidden"; }
-    else if (current === N) { for (let i = 0; i < N - 1; i++) leaves[i].style.visibility = "hidden"; }
-  }
-
-  function setView(v, animate) {
-    v = Math.max(0, Math.min(N, v));
-    if (v === current) return;
-    if (animate) {
-      // un paso a la vez para giros contiguos
-    }
-    const goingNext = v > current;
-    // aplicar instantáneo (para saltos del índice)
-    for (let i = 0; i < N; i++) {
-      leaves[i].classList.toggle("flipped", i < v);
-      leaves[i].classList.toggle("show-back", i < v);
-    }
-    current = v;
-    settleStaticPages();
-    applyZ(-1);
-    edgeHide();
-    updateHud();
-  }
-
-  function turn(dir) {
-    if (busy) return;
-    if (dir === "next" && current >= N) return;
-    if (dir === "prev" && current <= 0) return;
-    busy = true;
-    hideTip();
-    revealAll();
-    const idx = dir === "next" ? current : current - 1;
-    const leaf = leaves[idx];
-    leaf.classList.remove("settled-left");
-    void leaf.offsetWidth;
-    applyZ(idx);
-    leaf.classList.add("turning");
-    requestAnimationFrame(() => {
-      if (dir === "next") leaf.classList.add("flipped");
-      else leaf.classList.remove("flipped");
-    });
-    // cambiar la cara visible a mitad del giro (~90°)
-    const halfT = setTimeout(() => {
-      if (dir === "next") leaf.classList.add("show-back");
-      else leaf.classList.remove("show-back");
-    }, 450);
-    current += dir === "next" ? 1 : -1;
-    const done = () => {
-      clearTimeout(halfT);
-      if (dir === "next") leaf.classList.add("show-back");
-      else leaf.classList.remove("show-back");
-      leaf.classList.remove("turning");
-      settleStaticPages();
-      applyZ(-1);
-      edgeHide();
-      busy = false;
-      updateHud();
-      leaf.removeEventListener("transitionend", done);
-    };
-    leaf.addEventListener("transitionend", done);
-    setTimeout(() => { if (busy) done(); }, 1000); // respaldo
-    updateHud();
-  }
-
-  /* ============================================================
-     HUD (dots + flechas + pageno)
-     ============================================================ */
-  const dotsWrap = document.getElementById("dots");
-  for (let v = 0; v <= N; v++) {
-    const b = document.createElement("button");
-    b.className = "dot";
-    b.dataset.v = v;
-    b.title = labels[v] || ("Vista " + v);
-    b.addEventListener("click", () => setView(v, false));
-    dotsWrap.appendChild(b);
-  }
-  const pageno = document.getElementById("pageno");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-
-  function updateHud() {
-    if (!busy) fit();
-    [...dotsWrap.children].forEach((d, v) => d.classList.toggle("active", v === current));
-    pageno.textContent = (labels[current] || `Vista ${current + 1}`);
-    prevBtn.disabled = current <= 0;
-    nextBtn.disabled = current >= N;
-    // centrar páginas únicas (portada / contraportada)
-    let shift = 0;
-    if (current === 0) shift = -PAGE_W;        // sólo página derecha (portada)
-    book.style.left = `${shift}px`;
-  }
-
-  prevBtn.addEventListener("click", () => turn("prev"));
-  nextBtn.addEventListener("click", () => turn("next"));
-  document.addEventListener("keydown", (e) => {
-    if (lb && lb.classList.contains("show")) {
-      if (e.key === "Escape") closeLightbox();
-      return;
-    }
-    if (e.key === "ArrowRight" || e.key === "PageDown") turn("next");
-    if (e.key === "ArrowLeft" || e.key === "PageUp") turn("prev");
-  });
-
-  /* corners + galería */
-  book.addEventListener("click", (e) => {
-    // ampliar imagen activa (carrusel o galería)
-    const z = e.target.closest("[data-zoom]");
-    if (z) {
-      const car = z.closest("[data-carousel]");
-      const slot = car ? car.querySelector(".cslide.on") : z.closest(".gal__stage").querySelector("image-slot");
-      openLightbox(slot); return;
-    }
-    // carrusel: flechas y bullets
-    const cnav = e.target.closest("[data-cnav]");
-    if (cnav) { carGo(cnav.closest("[data-carousel]"), +cnav.closest("[data-carousel]").dataset.idx + (+cnav.dataset.cnav)); return; }
-    const cdot = e.target.closest("[data-cdot]");
-    if (cdot) { carGo(cdot.closest("[data-carousel]"), +cdot.dataset.cdot); return; }
-    // rail: flechas arriba/abajo de las miniaturas
-    const rn = e.target.closest("[data-railnav]");
-    if (rn) { railScroll(rn.closest(".gal__rail"), +rn.dataset.railnav); return; }
-    // miniatura llena → hacer principal
-    const thumb = e.target.closest(".gal__rail image-slot");
-    if (thumb && thumb.hasAttribute("data-filled")) { promote(thumb); return; }
-    const c = e.target.closest("[data-turn]");
-    if (c) { turn(c.dataset.turn); return; }
-    const g = e.target.closest("[data-goto-cat]");
-    if (g) {
-      const id = g.dataset.gotoCat;
-      const pi = pages.findIndex((p) => p.id === id);
-      if (pi >= 0) setView(Math.floor(pi / 2), false);
-      return;
-    }
-    const add = e.target.closest("[data-add],[data-inc]");
-    if (add) { changeQty(add.dataset.add || add.dataset.inc, 1); return; }
-    const dec = e.target.closest("[data-dec]");
-    if (dec) { changeQty(dec.dataset.dec, -1); return; }
-  });
-
-  /* ---------- carrusel (estilo Google Shopping) ---------- */
-  function carGo(car, idx) {
-    const slides = car.querySelectorAll(".cslide");
-    const n = slides.length;
-    const i = ((idx % n) + n) % n;
-    car.dataset.idx = i;
-    slides.forEach((s, j) => s.classList.toggle("on", j === i));
-    car.querySelectorAll(".cdot").forEach((d, j) => d.classList.toggle("on", j === i));
-  }
-  // autoplay al hacer hover sobre la imagen
-  document.querySelectorAll("[data-carousel]").forEach((car) => {
-    let t;
-    car.addEventListener("mouseenter", () => { clearInterval(t); t = setInterval(() => carGo(car, +car.dataset.idx + 1), 1100); });
-    car.addEventListener("mouseleave", () => clearInterval(t));
-  });
-
-  /* ---------- galería: scroll del rail (2 miniaturas + flechas) ---------- */
-  function railScroll(rail, d) {
-    const track = rail.querySelector(".rail-track");
-    const slots = track.querySelectorAll("image-slot");
-    const visible = 2;
-    const max = Math.max(0, slots.length - visible);
-    let off = Math.max(0, Math.min(max, (+rail.dataset.roff || 0) + d));
-    rail.dataset.roff = off;
-    const step = slots[0].offsetHeight + 8;
-    track.style.transform = `translateY(${-off * step}px)`;
-    const up = rail.querySelector(".rail-nav.up"), dn = rail.querySelector(".rail-nav.down");
-    if (up) up.disabled = off <= 0;
-    if (dn) dn.disabled = off >= max;
-  }
-  document.querySelectorAll(".gal__rail").forEach((rail) => railScroll(rail, 0));
-
-  /* ---------- galería: promover miniatura a principal ---------- */
-  function promote(slot) {
-    const gal = slot.closest(".gal");
-    const stage = gal.querySelector(".gal__stage");
-    const rail = gal.querySelector(".gal__rail");
-    const cur = stage.querySelector("image-slot");
-    if (cur === slot) return;
-    const ref = slot.nextElementSibling;
-    stage.insertBefore(slot, stage.firstChild);   // miniatura → principal
-    if (ref) rail.insertBefore(cur, ref); else rail.appendChild(cur); // principal → su lugar
-  }
-
-  /* ---------- galería: lightbox ---------- */
-  const lb = document.getElementById("lightbox");
-  const lbImg = document.getElementById("lbImg");
-  function openLightbox(slot) {
-    if (!slot || !slot.hasAttribute("data-filled")) {
-      showToast("Arrastra una imagen al producto primero");
-      return;
-    }
-    const im = slot.shadowRoot && slot.shadowRoot.querySelector(".frame img");
-    const src = im && im.getAttribute("src");
-    if (!src) return;
-    lbImg.src = src;
-    lb.classList.add("show");
-  }
-  function closeLightbox() { lb.classList.remove("show"); lbImg.removeAttribute("src"); }
-  lb.addEventListener("click", (e) => { if (e.target === lb || e.target.closest("[data-lbclose]")) closeLightbox(); });
-
-  /* ============================================================
-     ESCALADO
-     ============================================================ */
-  const scaler = document.getElementById("bookScale");
-  function fit() {
-    const stage = document.querySelector(".stage");
-    const rect = stage.getBoundingClientRect();
-    const visibleW = (current === 0 || current === N) ? PAGE_W : SPREAD_W;
-    scaler.style.width = `${visibleW}px`;
-    scaler.style.height = `${PAGE_H}px`;
-    const sideBreathing = window.innerWidth < 700 ? 20 : 32;
-    const availW = Math.max(1, rect.width - sideBreathing);
-    const availH = Math.max(1, rect.height);
-    // Tan grande como quepa sin recortar. La reserva vertical vive en .stage;
-    // aquí sólo medimos la caja real para no duplicar restas y evitar huecos.
-    const s = Math.min(availW / visibleW, availH / PAGE_H, 1.5);
-    scaler.style.zoom = Math.max(0.1, s);
-  }
-  window.addEventListener("resize", fit);
-  fit();
-
-  /* ============================================================
-     COTIZACIÓN
-     ============================================================ */
-  const countEl = document.getElementById("quoteCount");
-  function refreshCount() {
-    const n = quoteCount();
-    countEl.textContent = n;
-    countEl.style.display = n ? "grid" : "none";
-  }
-  const toast = document.getElementById("toast");
-  const toastMsg = document.getElementById("toastMsg");
-  let toastT;
-  function showToast(msg) {
-    toastMsg.textContent = msg;
-    toast.classList.add("show");
-    clearTimeout(toastT);
-    toastT = setTimeout(() => toast.classList.remove("show"), 2000);
-  }
   function changeQty(sku, delta) {
+    const item = productBySku.get(sku);
+    if (!item) return;
+
     const next = (quote[sku] || 0) + delta;
-    if (next <= 0) delete quote[sku]; else quote[sku] = next;
+    if (next <= 0) delete quote[sku];
+    else quote[sku] = next;
+
     saveQuote();
-    refreshCount();
-    const wrap = document.querySelector(`[data-wrap="${sku}"]`);
-    if (wrap) wrap.innerHTML = addControl(sku);
-    if (delta > 0) showToast(`Agregado · ${quoteCount()} ítem${quoteCount() !== 1 ? "s" : ""} en el carro`);
+    refreshQuote();
+    if (delta > 0) showToast(`${item.product.brand} agregado`);
   }
-  document.getElementById("quoteBtn").addEventListener("click", () => {
-    const n = quoteCount();
-    if (!n) { showToast("Tu carro está vacío"); return; }
-    if (confirm(`Tienes ${n} ítem(s) en tu carro.\n\n¿Vaciar el carro?`)) {
-      quote = {}; saveQuote(); refreshCount();
-      document.querySelectorAll("[data-wrap]").forEach((w) => { w.innerHTML = addControl(w.dataset.wrap); });
-      showToast("Carro vaciado");
+
+  function refreshQuote() {
+    const count = quoteCount();
+    const countEl = document.getElementById("quoteCount");
+    if (countEl) countEl.textContent = count;
+    refreshQuoteControls();
+    if (state.cartOpen) renderCartDrawer();
+  }
+
+  function refreshQuoteControls() {
+    document.querySelectorAll("[data-wrap]").forEach((wrap) => {
+      wrap.innerHTML = addControl(wrap.dataset.wrap);
+    });
+  }
+
+  function openCart() {
+    state.cartOpen = true;
+    document.body.classList.add("drawer-open");
+    document.getElementById("drawerLayer").setAttribute("aria-hidden", "false");
+    renderCartDrawer();
+  }
+
+  function closeCart() {
+    state.cartOpen = false;
+    document.body.classList.remove("drawer-open");
+    document.getElementById("drawerLayer").setAttribute("aria-hidden", "true");
+  }
+
+  function renderCartDrawer() {
+    const drawer = document.getElementById("cartDrawer");
+    const entries = Object.entries(quote)
+      .map(([sku, qty]) => ({ item: productBySku.get(sku), qty }))
+      .filter(({ item }) => item);
+
+    drawer.innerHTML = `<div class="drawer-head">
+      <div>
+        <span class="eyebrow">Carro de compras</span>
+        <h2>${quoteCount()} ítem${quoteCount() === 1 ? "" : "s"}</h2>
+      </div>
+      <button class="icon-button" type="button" data-cart-close aria-label="Cerrar">${ICON.close}</button>
+    </div>
+    <div class="cart-lines">
+      ${entries.length ? entries.map(renderCartLine).join("") : `<div class="cart-empty">Tu carro está vacío.</div>`}
+    </div>
+    <div class="drawer-total">
+      <span>Total estimado</span>
+      <strong>${CLP(quoteTotal())}</strong>
+    </div>
+    <div class="drawer-actions">
+      <button class="secondary-button" type="button" data-clear-cart>${ICON.trash}<span>Vaciar</span></button>
+      <a class="primary-link" href="https://www.implementos.cl/" target="_blank" rel="noreferrer">Ir a implementos.cl</a>
+    </div>`;
+  }
+
+  function renderCartLine({ item, qty }) {
+    const { product, cat } = item;
+    return `<article class="cart-line">
+      <div>
+        <span>${esc(cat.short || cat.name)}</span>
+        <h3>${esc(product.title)}</h3>
+        <p>${esc(product.sku)} · ${esc(product.brand)}</p>
+      </div>
+      <div class="cart-line__side">
+        <strong>${CLP(product.price * qty)}</strong>
+        <div class="qty-stepper qty-stepper--small">
+          <button type="button" data-dec="${esc(product.sku)}" aria-label="Quitar uno">${ICON.minus}</button>
+          <b>${qty}</b>
+          <button type="button" data-inc="${esc(product.sku)}" aria-label="Agregar uno">${ICON.plus}</button>
+        </div>
+      </div>
+    </article>`;
+  }
+
+  function promoteImageSlot(slot) {
+    const media = slot.closest(".product-media");
+    const main = media.querySelector(".media-main");
+    const current = main.querySelector("image-slot");
+    if (!current || current === slot) return;
+
+    const strip = media.querySelector(".media-strip");
+    const before = slot.nextElementSibling;
+    main.insertBefore(slot, main.firstChild);
+    if (before) strip.insertBefore(current, before);
+    else strip.appendChild(current);
+  }
+
+  function openLightbox(slot) {
+    const img = slot && slot.shadowRoot && slot.shadowRoot.querySelector(".frame img");
+    const src = img && img.getAttribute("src");
+    if (!src) {
+      showToast("Imagen no disponible");
+      return;
     }
-  });
+    document.getElementById("lbImg").src = src;
+    document.getElementById("lightbox").classList.add("show");
+    document.getElementById("lightbox").setAttribute("aria-hidden", "false");
+  }
 
-  /* iconos estáticos del header */
-  document.querySelectorAll("[data-icon]").forEach((el) => { el.innerHTML = ICON[el.dataset.icon] || ""; });
+  function closeLightbox() {
+    const lightbox = document.getElementById("lightbox");
+    lightbox.classList.remove("show");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.getElementById("lbImg").removeAttribute("src");
+  }
 
-  /* fallback del logo si la URL remota no carga */
-  document.querySelectorAll(".logo-img").forEach((img) => {
-    const swap = () => {
-      const t = img.parentNode.querySelector(".logo-text");
-      if (t) { img.style.display = "none"; t.style.display = "inline-flex"; }
-    };
-    if (img.complete && img.naturalWidth === 0) swap();
-    img.addEventListener("error", swap);
-  });
+  let toastTimer;
+  function showToast(message) {
+    const toast = document.getElementById("toast");
+    document.getElementById("toastMsg").textContent = message;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+  }
 
-  /* tip inicial */
-  const tip = document.getElementById("tip");
-  let tipT = setTimeout(hideTip, 5000);
-  function hideTip() { if (tip) tip.classList.add("hide"); clearTimeout(tipT); }
+  function hydrateLogoFallbacks() {
+    document.querySelectorAll(".logo-img").forEach((img) => {
+      const swap = () => {
+        const fallback = img.parentNode.querySelector(".logo-text");
+        if (fallback) {
+          img.style.display = "none";
+          fallback.style.display = "inline-flex";
+        }
+      };
+      if (img.complete && img.naturalWidth === 0) swap();
+      img.addEventListener("error", swap);
+    });
+  }
 
-  refreshCount();
-  applyZ(-1);
-  edgeHide();
-  updateHud();
-  requestAnimationFrame(() => book.classList.add("is-ready"));
+  renderShell();
 })();
