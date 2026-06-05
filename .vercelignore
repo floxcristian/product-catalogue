@@ -1,0 +1,4 @@
+# Artefactos de desarrollo — no se necesitan en el sitio publicado
+screenshots/
+uploads/
+.thumbnail
