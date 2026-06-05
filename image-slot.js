@@ -50,9 +50,9 @@
 
 (() => {
   const STATE_FILE = 'image-slots.state.json';
-  // 2× a ~600px slot in a 1920-wide deck — retina-sharp without making the
-  // sidecar enormous. A 1200px WebP at q=0.85 is ~150-300KB.
-  const MAX_DIM = 1200;
+  // 2× a visible slot in a large catalogue view — retina-sharp without making
+  // the sidecar enormous. A 1800px WebP at q=0.85 is still manageable.
+  const MAX_DIM = 1800;
   // Raster formats only. SVG is excluded (can carry script; createImageBitmap
   // on SVG blobs is inconsistent). GIF is excluded because the canvas
   // re-encode keeps only the first frame, so an animated GIF would silently
@@ -140,9 +140,9 @@
 
   // ── Image downscale ─────────────────────────────────────────────────────
   // Encode through a canvas so the sidecar carries resized bytes, not the
-  // raw upload. Longest side is capped at 2× the slot's rendered width
-  // (retina) and at MAX_DIM. WebP keeps alpha and is ~10× smaller than PNG
-  // for photos, so there's no need for per-image format picking.
+  // raw upload. Longest side is capped at 2× the slot's visible/rendered
+  // width (retina) and at MAX_DIM. WebP keeps alpha and is ~10× smaller than
+  // PNG for photos, so there's no need for per-image format picking.
   async function toDataUrl(file, targetW) {
     const bitmap = await createImageBitmap(file);
     try {
@@ -477,7 +477,8 @@
       // resumes — bump + capture a generation so stale encodes bail.
       const gen = ++this._gen;
       try {
-        const w = this.clientWidth || this.offsetWidth || MAX_DIM;
+        const rect = this.getBoundingClientRect();
+        const w = Math.max(this.clientWidth || 0, this.offsetWidth || 0, rect.width || 0) || MAX_DIM;
         const url = await toDataUrl(file, w);
         if (gen !== this._gen) return;
         // Only exit reframe once the new image is in hand — a rejected type

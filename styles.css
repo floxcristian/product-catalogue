@@ -37,10 +37,11 @@ body {
    ============================================================ */
 .stage {
   /* Reserva real: poco arriba (aprovecha el espacio superior) y lo justo
-     abajo para el HUD de puntos/paginación. El libro se centra dentro de esta
-     caja, así que crece hacia arriba en vez de dejar margen simétrico. */
+     abajo para el HUD de puntos/paginación. Si el ancho manda la escala
+     (pantallas angostas), el libro queda pegado arriba en vez de flotar en
+     medio de una caja alta. */
   position:fixed; top:14px; left:0; right:0; bottom:66px;
-  display:grid; place-items:center;
+  display:grid; place-items:start center;
   overflow:hidden;
 }
 .book-scale {
@@ -78,6 +79,16 @@ body {
   transition:transform .9s var(--flip-ease);
 }
 .leaf.flipped { transform:rotateY(-180deg); }
+.leaf.settled-left {
+  left:0;
+  transform:none;
+  transform-style:flat;
+}
+.leaf.settled-left .face.front { visibility:hidden; }
+.leaf.settled-left .face.back {
+  transform:none;
+  visibility:visible;
+}
 
 .face {
   position:absolute; inset:0;

@@ -33,6 +33,9 @@
   const quoteCount = () => Object.values(quote).reduce((a, b) => a + b, 0);
 
   const totalItems = C.categories.reduce((a, c) => a + c.products.length, 0);
+  const PAGE_W = 820;
+  const PAGE_H = 1080;
+  const SPREAD_W = PAGE_W * 2;
 
   /* ============================================================
      CONSTRUCCIÓN DE PÁGINAS
@@ -323,6 +326,11 @@
       leaf.style.zIndex = z;
     });
   }
+  function settleStaticPages() {
+    leaves.forEach((leaf, i) => {
+      leaf.classList.toggle("settled-left", i < current && !leaf.classList.contains("turning"));
+    });
+  }
 
   function revealAll() { leaves.forEach((l) => { l.style.visibility = ""; }); }
   /* ocultar hojas apiladas detrás cuando sólo se ve una página (portada/contraportada) */
@@ -345,6 +353,7 @@
       leaves[i].classList.toggle("show-back", i < v);
     }
     current = v;
+    settleStaticPages();
     applyZ(-1);
     edgeHide();
     updateHud();
@@ -359,6 +368,8 @@
     revealAll();
     const idx = dir === "next" ? current : current - 1;
     const leaf = leaves[idx];
+    leaf.classList.remove("settled-left");
+    void leaf.offsetWidth;
     applyZ(idx);
     leaf.classList.add("turning");
     requestAnimationFrame(() => {
@@ -376,6 +387,7 @@
       if (dir === "next") leaf.classList.add("show-back");
       else leaf.classList.remove("show-back");
       leaf.classList.remove("turning");
+      settleStaticPages();
       applyZ(-1);
       edgeHide();
       busy = false;
@@ -404,14 +416,15 @@
   const nextBtn = document.getElementById("nextBtn");
 
   function updateHud() {
+    if (!busy) fit();
     [...dotsWrap.children].forEach((d, v) => d.classList.toggle("active", v === current));
     pageno.textContent = (labels[current] || `Vista ${current + 1}`);
     prevBtn.disabled = current <= 0;
     nextBtn.disabled = current >= N;
     // centrar páginas únicas (portada / contraportada)
     let shift = 0;
-    if (current === 0) shift = -410;        // sólo página derecha (portada)
-    else if (current === N) shift = 410;    // sólo página izquierda (contraportada)
+    if (current === 0) shift = -PAGE_W / 2;        // sólo página derecha (portada)
+    else if (current === N) shift = PAGE_W / 2;    // sólo página izquierda (contraportada)
     book.style.transform = `translateX(${shift}px)`;
     // ocultar marca flotante en portada/contraportada (ya muestran el logo grande)
     const bt = document.querySelector(".brand-tab");
@@ -530,16 +543,16 @@
      ============================================================ */
   const scaler = document.getElementById("bookScale");
   function fit() {
-    const bw = 1640, bh = 1080;
-    // Tan grande como quepa sin recortar. Respiro lateral mínimo; la reserva
-    // vertical (poca arriba, HUD abajo) la define el inset de .stage en el CSS,
-    // por eso aquí restamos lo mismo (14 + 66 = 80). `zoom` re-rasteriza el
-    // texto al tamaño final → nítido en cualquier pantalla/DPR, y permite
-    // crecer por encima de 1 sin pixelar (tope 1.5 para no sobre-ampliar fotos).
-    const availW = window.innerWidth - 32;
-    const availH = window.innerHeight - 80;
-    const s = Math.min(availW / bw, availH / bh, 1.5);
-    scaler.style.zoom = s;
+    const stage = document.querySelector(".stage");
+    const rect = stage.getBoundingClientRect();
+    const visibleW = (current === 0 || current === N) ? PAGE_W : SPREAD_W;
+    const sideBreathing = window.innerWidth < 700 ? 20 : 32;
+    const availW = Math.max(1, rect.width - sideBreathing);
+    const availH = Math.max(1, rect.height);
+    // Tan grande como quepa sin recortar. La reserva vertical vive en .stage;
+    // aquí sólo medimos la caja real para no duplicar restas y evitar huecos.
+    const s = Math.min(availW / visibleW, availH / PAGE_H, 1.5);
+    scaler.style.zoom = Math.max(0.1, s);
   }
   window.addEventListener("resize", fit);
   fit();
