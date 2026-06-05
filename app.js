@@ -423,12 +423,8 @@
     nextBtn.disabled = current >= N;
     // centrar páginas únicas (portada / contraportada)
     let shift = 0;
-    if (current === 0) shift = -PAGE_W / 2;        // sólo página derecha (portada)
-    else if (current === N) shift = PAGE_W / 2;    // sólo página izquierda (contraportada)
-    book.style.transform = `translateX(${shift}px)`;
-    // ocultar marca flotante en portada/contraportada (ya muestran el logo grande)
-    const bt = document.querySelector(".brand-tab");
-    if (bt) bt.style.opacity = (current === 0 || current === N) ? "0" : "1";
+    if (current === 0) shift = -PAGE_W;        // sólo página derecha (portada)
+    book.style.left = `${shift}px`;
   }
 
   prevBtn.addEventListener("click", () => turn("prev"));
@@ -546,6 +542,8 @@
     const stage = document.querySelector(".stage");
     const rect = stage.getBoundingClientRect();
     const visibleW = (current === 0 || current === N) ? PAGE_W : SPREAD_W;
+    scaler.style.width = `${visibleW}px`;
+    scaler.style.height = `${PAGE_H}px`;
     const sideBreathing = window.innerWidth < 700 ? 20 : 32;
     const availW = Math.max(1, rect.width - sideBreathing);
     const availH = Math.max(1, rect.height);
@@ -616,4 +614,5 @@
   applyZ(-1);
   edgeHide();
   updateHud();
+  requestAnimationFrame(() => book.classList.add("is-ready"));
 })();

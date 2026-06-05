@@ -49,15 +49,20 @@ body {
      `transform: scale`. Por eso aquí NO va `will-change:transform`: forzaba a
      cachear el libro como un bitmap 1× que luego se estiraba → texto borroso.
      Sólo se conserva el contexto 3D que necesita el volteo de páginas. */
+  position:relative;
+  width:calc(var(--pageW) * 2);
+  height:var(--pageH);
   perspective:2600px;
   transform-style:preserve-3d;
 }
 .book {
-  position:relative;
+  position:absolute; top:0; left:0;
   width:calc(var(--pageW) * 2);
   height:var(--pageH);
   transform-style:preserve-3d;
-  transition:transform .9s var(--flip-ease);
+}
+.book.is-ready {
+  transition:left .9s var(--flip-ease);
 }
 /* sombra base del libro sobre el escritorio */
 .book::after {
@@ -164,8 +169,11 @@ body {
 
 /* marca + cotización flotantes */
 .brand-tab {
+  /* Oculto: con el libro a tamaño completo se encimaba con la cabecera de cada
+     página (que ya rotula "implementos.cl"). Se conserva en el DOM por si se
+     quiere reactivar (cambiar display:none por flex). */
   position:fixed; top:20px; left:24px; z-index:60;
-  display:flex; align-items:baseline; gap:8px;
+  display:none; align-items:baseline; gap:8px;
   color:#fff;
   transition:opacity .4s var(--ease);
 }
