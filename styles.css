@@ -25,6 +25,8 @@ body {
   background:
     radial-gradient(120% 90% at 50% -10%, #20304a 0%, #0f1a2c 45%, #070e1a 100%);
   -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
 }
 ::selection { background:var(--blue); color:#fff; }
 .cond { font-family:"Barlow Condensed", sans-serif; }
@@ -34,7 +36,10 @@ body {
    STAGE + escalado
    ============================================================ */
 .stage {
-  position:fixed; inset:0;
+  /* Reserva real: poco arriba (aprovecha el espacio superior) y lo justo
+     abajo para el HUD de puntos/paginación. El libro se centra dentro de esta
+     caja, así que crece hacia arriba en vez de dejar margen simétrico. */
+  position:fixed; top:14px; left:0; right:0; bottom:66px;
   display:grid; place-items:center;
   overflow:hidden;
 }

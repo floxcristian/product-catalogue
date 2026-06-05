@@ -531,11 +531,14 @@
   const scaler = document.getElementById("bookScale");
   function fit() {
     const bw = 1640, bh = 1080;
-    const availW = window.innerWidth - 150;
-    const availH = window.innerHeight - 178;
-    const s = Math.min(availW / bw, availH / bh, 1.05);
-    // `zoom` (no `transform: scale`): el navegador re-rasteriza el contenido al
-    // tamaño final, así el texto queda nítido en cualquier pantalla y DPR.
+    // Tan grande como quepa sin recortar. Respiro lateral mínimo; la reserva
+    // vertical (poca arriba, HUD abajo) la define el inset de .stage en el CSS,
+    // por eso aquí restamos lo mismo (14 + 66 = 80). `zoom` re-rasteriza el
+    // texto al tamaño final → nítido en cualquier pantalla/DPR, y permite
+    // crecer por encima de 1 sin pixelar (tope 1.5 para no sobre-ampliar fotos).
+    const availW = window.innerWidth - 32;
+    const availH = window.innerHeight - 80;
+    const s = Math.min(availW / bw, availH / bh, 1.5);
     scaler.style.zoom = s;
   }
   window.addEventListener("resize", fit);
