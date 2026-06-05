@@ -680,6 +680,11 @@ body {
 
 @media (max-width: 700px) {
   .brand-tab { display:none; }
+  .quote-btn {
+    top:auto;
+    right:18px;
+    bottom:88px;
+  }
   .nav-arrow {
     width:50px;
     height:50px;
