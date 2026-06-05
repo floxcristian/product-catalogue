@@ -39,8 +39,10 @@ body {
   overflow:hidden;
 }
 .book-scale {
-  transform-origin:center center;
-  will-change:transform;
+  /* El ajuste al viewport se hace con `zoom` desde fit() (app.js), no con
+     `transform: scale`. Por eso aquí NO va `will-change:transform`: forzaba a
+     cachear el libro como un bitmap 1× que luego se estiraba → texto borroso.
+     Sólo se conserva el contexto 3D que necesita el volteo de páginas. */
   perspective:2600px;
   transform-style:preserve-3d;
 }

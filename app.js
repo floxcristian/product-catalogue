@@ -534,7 +534,9 @@
     const availW = window.innerWidth - 150;
     const availH = window.innerHeight - 178;
     const s = Math.min(availW / bw, availH / bh, 1.05);
-    scaler.style.transform = `scale(${s})`;
+    // `zoom` (no `transform: scale`): el navegador re-rasteriza el contenido al
+    // tamaño final, así el texto queda nítido en cualquier pantalla y DPR.
+    scaler.style.zoom = s;
   }
   window.addEventListener("resize", fit);
   fit();
